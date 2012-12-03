@@ -1,0 +1,564 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="manual.xsl"?>
+<manual>
+
+	<meta>
+		<title>Instrukcja obsługi UNIX-a</title>
+		<data label="Autorzy:">
+			<item>Krzysztof Śmiałek</item>
+			<item>Adam Gajek</item>
+		</data>
+		<data label="Kontakt:">admin (na) avensome.net</data>
+		<data label="Licencja:"><a href="http://creativecommons.org/licenses/by-sa/3.0/pl/">CC BY-SA 3.0</a></data>
+	</meta>
+
+	<section title="Teoria" quote="W teorii teoria i praktyka to to samo, w praktyce już nie." author="autor nieznany">
+		<list>
+			<item>
+				<p>Polecenia w tym pliku będą zapisywane z symbolem dolara, nie należy wpisywać go w terminalu.</p>
+			</item>
+			<item>
+				<p>Polecenia działają na wszystkich systemach uniksowych, tzn. szczególnie Linuxach i BSD.</p>
+			</item>
+			<item>
+				<p>Polecenia mogą przyjmować parametry (argumenty), tzn. dodatkowe dane po nazwie polecenia. Parametry opcjonalne są podane w [nawiasach kwadratowych].</p>
+				<p>Niektóre parametry wymagają dodatkowych związanych z nimi danych, wtedy będą odpowiednio opisane.</p>
+				<p>Niektóre polecenia rozróżniają trzy rodzaje parametrów:</p>
+				<ul>
+					<li>w stylu UNIX-a (z myślnikiem), np. <code>ps -e</code></li>
+					<li>w stylu BSD (sama litera), np. <code>ps a</code></li>
+					<li>w stylu GNU (przydługawe), np. <code>ps --headers</code></li>
+				</ul>
+				<p>
+					Ten cheat sheet nie opisuje parametrów GNU, jeśli istnieją równoważne odpowiedniki UNIX-a lub BSD.
+				</p>
+				<p>
+					Parametry UNIX-a i BSD nie zawsze są równoważne (w szczególności w poleceniu <code>ps</code>), tzn. parametr bez myślnika nie zawsze działa tak samo jak z myślnikiem.
+				</p>
+				<p>
+					Parametry-przełączniki (tzn. niewymagające dodatkowych danych) można łączyć, np. zamiast <code>ps a u x</code> można napisać <code>ps aux</code> Opisując kilka przełączników, będzie używany zapis skrócony.
+				</p>
+			</item>
+			<item>
+				<p>Jeśli nie wiesz jak działa jakieś polecenie:</p>
+				<ul>
+					<li>szybkie skrótowe info (nie zawsze dostępne): <code>nazwa_polecenia --help</code></li>
+					<li>do czego służy i jak się go zazwyczaj używa - Google: <code class="plain">nazwa_polecenia cheat sheet</code></li>
+					<li>szczegółowy opis: <code>man nazwa_polecenia</code> (obsługa <code class="plain">man</code> jak polecenia <code class="plain">less</code> opisanego poniżej)</li>
+				</ul>
+			</item>
+			<item>
+				Ścieżki bez slasha (<code class="plain">/</code>) na początku są interpretowane względem aktualnej, ścieżki ze slashem są interpretowane względem korzenia, tzn. bezwzględnie.
+			</item>
+			<item>
+				Zmienne środowiskowe to zmienne tekstowe, których używa aktualnie bash (interpreter poleceń). Każda zmienna ma nazwę i wartość.
+				Aby użyć zmiennej, należy wpisać symbol dolara i jej nazwę tam, gdzie ma zostać wstawiona (np. <code class="plain">$HOME</code>).
+			</item>
+			<item>
+				Katalog domowy:
+				<ul>
+					<li>to folder, w którym jesteś po zalogowaniu</li>
+					<li>jest oznaczany symbolem tyldy (<code class="plain">~</code>)</li>
+					<li>jego ścieżka jest w zmiennej <code class="plain">$HOME</code></li>
+				</ul>
+			</item>
+			<item>
+				<p>Interpretowanie poleceń: wszystko, co wpisujesz jest przed wykonaniem przetwarzane przez basha (interpreter poleceń). To znaczy jeśli wpiszesz <code>usun_pliki $PLIK</code> to <code class="plain">$PLIK</code> zostanie zastąpione zmienną <code class="plain">$PLIK</code>.</p>
+				<p>Należy szczególnie uważać na spacje w zmiennych. Powiedzmy, że <code class="plain">$PLIK</code> zawiera tekst: <code class="plain">plik1 plik2 plik3</code>. Wtedy zostanie wykonane polecenie:</p>
+				<pre>usun_pliki plik1 plik2 plik3</pre>
+				<p>Aby użyć znaku specjalnego jak zwykłego, należy poprzedzić go backslashem. Np. tu nie zostanie podstawiona zmienna:</p>
+					<pre>moj_program \$PLIK</pre>
+				<p>Dodatkowo:</p>
+				<ul>
+					<li>tekst w 'apostrofach' nie jest w ogóle interpretowany i jest odporny na problem ze spacjami</li>
+					<li>tekst w &quot;cudzysłowach&quot; jest interpretowany, ale odporny na problem ze spacjami</li>
+					<li>tekst w `akcentach` zostaje zastąpiony wynikiem wykonania polecenia między `akcentami`</li>
+					<li>
+						symbol gwiazdki włącza próbę dopasowania plików w bieżącym katalogu, więc np. <code>wypisz_pliki *.txt</code> może oznaczać:
+						<pre>wypisz_pliki jeden.txt dwa.txt trzy.txt</pre>
+					</li>
+					<li>
+						iloczyn kartezjański: <code class="plain">{a,b,c,...}{1,2,3,...}</code>, np. <code>usun_pliki {a,b,c}{1,2,3}</code> oznacza:
+						<pre>usun_pliki a1 a2 a3 b1 b2 b3 c1 c2 c3</pre>
+					</li>
+				</ul>
+			</item>
+			<item>
+				<p>Wszystko jest plikiem, w szczególności zawsze istnieją i są otwarte:</p>
+				<ul>
+					<li>wszystko co wpisujesz (plik 0)</li>
+					<li>wszystkie dane wypisywane przez program (plik 1)</li>
+					<li>wszystkie błędy wypisywane przez program (plik 2)</li>
+				</ul>
+				<p>Są one nazywane odpowiednio strumieniem wejścia, wyjścia, błędów.</p>
+				<p class="nugget">(Co dowodzi, że nie tylko w Windowsie można doświadczyć strumienia błędów!)</p>
+			</item>
+			<item>
+				<p>Można przekierować plik do innego pliku symbolami <code class="plain">&gt;</code> i <code class="plain">&gt;&gt;</code>, ewentualnie poprzedzonymi nazwą pliku. Przykłady:</p>
+				<p>Nadpisanie pliku strumieniem wyjścia polecenia:</p>
+				<pre>polecenie &gt; plik.txt</pre>
+				<p>lub:</p>
+				<pre>polecenie 1&gt; plik.txt</pre>
+				<p>Dopisanie strumienia wyjścia na końcu pliku:</p>
+				<pre>polecenie &gt;&gt; plik.txt</pre>
+				<p>lub:</p>
+				<pre>polecenie 1&gt;&gt; plik.txt</pre>
+				<p>Wypisanie strumienia błędów do pliku:</p>
+				<pre>polecenie 2&gt; bledy.txt</pre>
+			</item>
+			<item>
+				<p>Rurociąg: symbolem rury (<code class="plain">|</code>, ang. pipe) można od razu przekierować wyjście jednego polecenia na wejście drugiego, np.</p>
+				<pre>odczytaj_plik slodkiekotki.txt | wyslij_maila kotofil@gmail.com</pre>
+				<p>Można używać rury kilkakrotnie w jednym poleceniu i łączyć ją dowolnie z operatorami przekierowania, będą interpretowane od lewej do prawej.</p>
+				<pre>odczytaj_plik slodkiekotki.txt 2&gt; bledy.txt | wyslij_znajomym</pre>
+			</item>
+			<item>
+				<p>Jeśli chcesz się pozbyć zawartości strumienia, przekieruj go do pliku <code class="plain">/dev/null</code> - to czarna dziura, która pożre bezpowrotnie wszystko, co do niej trafi.</p>
+				<p>Np. pozbądźmy się błędów polecenia:</p>
+				<pre>polecenie 2&gt; /dev/null</pre>
+			</item>
+			<item>
+				<p>Niektóre programy operujące na plikach nie wymagają podawania plików jako argumentów. Jakkolwiek może to brzmieć dziwnie, to jednak zadziała: program będzie używał wejścia (plik 0) jako pliku. Czyli co tylko wpiszesz, staje się plikiem. Wprowadzanie kończysz wciskając <kbd>^D</kbd>. (w kombinacjach klawiszy na UNIX-ach <kbd>^</kbd> oznacza <kbd>Ctrl</kbd>)</p>
+			</item>
+			<item>
+				Coś nie działa jak należy? Wciśnij <kbd>^C</kbd>, prędzej czy później się wyłączy. (pamiętaj, <kbd>^</kbd> oznacza <kbd>Ctrl</kbd>)
+			</item>
+			<item>
+				Strzałka w górę może oszczędzić sporo pisania.
+			</item>
+		</list>
+	</section>
+
+	<section title="Poruszanie się po katalogach">
+		<command name="pwd">
+			<h>
+				<pre>pwd</pre>
+				<p>Wypisuje ścieżkę do aktualnego katalogu.</p>
+			</h>
+		</command>
+
+		<command name="cd">
+			<h>
+				<pre>cd [ścieżka]</pre>
+				<p>Bez parametrów: przechodzi do katalogu <code class="plain">~</code></p>
+				<p>Z parametrem: przechodzi do katalogu podanego w parametrze</p>
+			</h>
+		</command>
+
+		<command name="mv, cp">
+			<h>
+				<pre>mv skąd gdzie</pre>
+				<pre>cp skąd gdzie</pre>
+				<p>mv - (move) przenosi plik</p>
+				<p>cp - (copy) kopiuje plik</p>
+			</h>
+			<p>Jeśli podany plik docelowy jest folderem, plik źródłowy zostanie przeniesiony/skopiowany do wnętrza folderu, w przeciwnym wypadku zostanie przeniesiony/skopiowany pod nową nazwą.</p>
+			<p><code>mv</code> można używać do zmiany nazwy pliku.</p>
+		</command>
+
+		<command name="mkdir">
+			<h>
+				<pre>mkdir [-p] plik [plik2] [plik3] [...]</pre>
+				<p>Tworzy katalogi o podanej nazwie.</p>
+			</h>
+			<p><code class="plain">-p</code> włącza tworzenie drzewa katalogów, tzn. jeśli wyższe katalogi nie istnieją, zostaną utworzone.</p>
+			<p>Np. polecenie:</p>
+			<pre>mkdir ala/ma/kota</pre>
+			<p>może w razie potrzeby zadziałać jak:</p>
+			<pre>mkdir ala ala/ma ala/ma/kota</pre>
+		</command>
+
+		<command name="rmdir">
+			<h>
+				<pre>rmdir plik [plik2] [plik3] [...]</pre>
+				<p>Usuwa katalogi o podanej nazwie o ile jest pusty.</p>
+			</h>
+		</command>
+
+		<command name="rm">
+			<h>
+				<pre>rm [-rf] plik [plik2] [plik3] [...]</pre>
+				<p>Usuwa pliki. Nie usuwa katalogów.</p>
+			</h>
+			<p><code class="plain">-f</code> wyłącza błędy, jeśli podany plik nie istnieje.</p>
+			<p><code class="plain">-r</code> - Włącza usuwanie katalogów wraz z ich zawartością. NIE uruchamiać na plikach systemowych, A SZCZEGÓLNIE na korzeniu systemu plików. SERIO.</p>
+		</command>
+
+		<command name="ls">
+			<h>
+				<pre>ls [-ali] [ścieżka]</pre>
+				<p>Wypisuje zawartość aktualnego katalogu lub podanego w argumencie, pomija pliki zaczynające się od kropki.</p>
+			</h>
+			<p><code class="plain">-a</code> wypisuje również pliki zaczynające się od kropki.</p>
+			<p><code class="plain">-l</code> wypisuje długi listing, tzn. razem z prawami dostępu, ilością dowiązań twardych, właścielem zwykłym i grupowym, wielkością, datą.</p>
+			<p><code class="plain">-i</code> wypisuje i-węzły plików.</p>
+		</command>
+	</section>
+
+	<section title="Przeglądanie plików">
+		<command name="cat">
+			<h>
+				<pre>cat [plik] [plik2] [plik3] [...]</pre>
+				<p>Wypisuje pliki jeden po drugim. Można użyć do łączenia plików w jeden.</p>
+			</h>
+			<p>Suchar linuksiarski: <code>man cat</code> - człowiek kot!</p>
+		</command>
+
+		<command name="nano">
+			<h>
+				<pre>nano [plik]</pre>
+				<p>Prosty edytor tekstowy. Jeśli dostanie plik jako argument, otwiera go.</p>
+			</h>
+			<p>Niektórzy preferują bardziej hardkorowy <code class="plain">vi</code>.</p>
+			<p>Gdyby komuś zdarzyło się niechcący włączyć <code class="plain">vi</code>, to wyjść można wciskając ESC, potem wpisując <code class="plain">:q!</code> i wciskając <kbd>Enter</kbd>. (intuicyjne, prawda?)</p>
+		</command>
+
+		<command name="wc">
+			<h>
+				<pre>wc [-clw] [plik]</pre>
+				<p>Wypisuje ilość wierszy, słów i bajtów w pliku tekstowym.</p>
+			</h>
+			<p><code class="plain">-c</code> wypisuje tylko znaki.</p>
+			<p><code class="plain">-l</code> wypisuje tylko linie.</p>
+			<p><code class="plain">-w</code> wypisuje tylko słowa.</p>
+		</command>
+
+		<command name="file">
+			<h>
+				<pre>file plik</pre>
+				<p>Wykonuje identyfikację typu pliku na podstawie zawartości.</p>
+			</h>
+		</command>
+
+		<command name="stat">
+			<h>
+				<pre>stat plik</pre>
+				<p>Wyświetla informacje o pliku z systemu plików (czasy dostępu itp.)</p>
+			</h>
+		</command>
+
+		<command name="head, tail">
+			<h>
+				<pre>head [-liczba] [plik]</pre>
+				<pre>tail [-liczba] [plik]</pre>
+				<p>Wypisuje tyle linii z początku/końca pliku. Jeśli nie zostanie podana liczba, przyjmuje domyślnie 10.</p>
+			</h>
+			<p>Przykłady:</p>
+			<pre>head plik.txt # pierwsze 10 linii</pre>
+			<pre>tail -3 plik.txt # ostatnie 3 linie</pre>
+		</command>
+
+		<command name="more">
+			<h>
+				<pre>more [plik]</pre>
+				<p>Podobne do <code>cat</code>, ale jeśli plik nie mieści się na ekranie, to wyświetla tyle ile się mieści i czeka na naciśnięcie przycisku. Później wypisuje kolejną stronę itd.</p>
+			</h>
+			<p>Często używany z rurą, np.:</p>
+			<pre>head -100 bardzo_dlugi_plik.txt | more</pre>
+		</command>
+
+		<command name="less">
+			<h>
+				<pre>less [plik]</pre>
+				<p>Rozbudowany more.</p>
+			</h>
+			<p>Można przewijać tekst strzałkami we wszystkich kierunkach, spacja przewija całą stronę. <kbd>q</kbd> wychodzi z programu.</p>
+			<p>Wpisanie w programie <code class="plain">/costam</code> powoduje wyszukanie &quot;costam&quot; w pliku.</p>
+			<p><kbd>n</kbd> przeskakuje do następnego wyszukanego miejsca, <kbd>N</kbd> do poprzedniego.</p>
+			<p><kbd>&gt;</kbd> przeskakuje na koniec pliku, <kbd>&lt;</kbd> na początek.</p>
+			<p>Więcej informacji w Google: <code class="plain">less cheat sheet</code></p>
+		</command>
+	</section>
+
+	<section title="Przeszukiwanie plików">
+		<command name="cut">
+			<h>
+				<pre>cut [-c które]/[-f które] [-dCośtam]</pre>
+				<p>Prymitywny program do wycinania kawałków plików. Wycina to, co sięmu poda.</p>
+			</h>
+			<p><code class="plain">-c</code> wycina wybrane litery, np. <code class="plain">-c 3-9</code> wytnie z każdej linii znaki od trzeciego do dziewiątego.</p>
+			<p><code class="plain">-f</code> wycina kolumny oddzielone tabulatorem.</p>
+			<p><code class="plain">-d</code> zmienia separator kolumn dla -f</p>
+			<p>Np. wycinanie nazw użytkowników z <code class="plain">/etc/passwd</code>:</p>
+			<pre>cat /etc/passwd | cut -d: -f 1</pre>
+		</command>
+
+		<command name="awk">
+			<h>
+				<pre>awk [trololo]</pre>
+				<p>Taki cut, tylko lepszy. Programowalny, co wyrażono symbolicznie poprzez "trololo".</p>
+			</h>
+			<p>Przykłady:</p>
+			<pre>cat /etc/passwd | awk -F: '{print $3" "$5}'</pre>
+			<pre>cat /etc/passwd | awk -F: '{if ($3==69) print $5}'</pre>
+		</command>
+
+		<command name="grep">
+			<h>
+				<pre>grep [-cirvx] wzorzec [plik]</pre>
+				<p>Filtruje wejście, pozostawiając tylko linie, które pasują do wzorca.</p>
+			</h>
+			<p>Wzorzec jest wyrażeniem regularnym (Google: <code class="plain">regular expressions</code>).</p>
+			<p><code class="plain">-c</code> wyświetla ilość linii zamiast treści.</p>
+			<p><code class="plain">-i</code> ignoruje wielkość liter.</p>
+			<p><code class="plain">-r</code> powoduje, że zamiast pliku przeszukiwane są wszystkie pliki w katalogu.</p>
+			<p><code class="plain">-v</code> odwraca działanie - szuka linii niepasujących do wzorca.</p>
+			<p><code class="plain">-x</code> dopasowuje tylko całe linie.</p>
+		</command>
+
+		<command name="sort">
+			<h>
+				<pre>sort [-bfnr] [plik]</pre>
+				<p>Sortuje linie według danego kryterium (domyślnie alfabetycznie).</p>
+			</h>
+			<p><code class="plain">-b</code> ignoruje puste znaki na początku linii przy sortowaniu.</p>
+			<p><code class="plain">-f</code> ignoruje wielkość liter.</p>
+			<p><code class="plain">-n</code> sortuje po liczbach rozpoczynających wiersz, implikuje -b (dzięki temu otrzymamy 1, 2, 3, 11, a nie 1, 11, 2, 3).</p>
+			<p><code class="plain">-r</code> odwraca kolejność wyników.</p>
+		</command>
+
+		<command name="find">
+			<h>
+				<pre>find [-maxdepth glebokosc] [-ctime n] [-size n[ckMG]] [-type typ] [-perm prawa]<br />[-exec polecenie {} \;] [ścieżka] [wyrażenie]</pre>
+				<p>Wyszukuje pliki w podanej ścieżce lub bieżącym katalogu i opcjonalnie wykonuje na nich podane operacje.</p>
+			</h>
+			<p>W przełącznikach zawierających argument <code class="plain">n</code> działają następujące reguły:</p>
+			<ul>
+				<li>liczby zaczynające się od <code class="plain">+</code> oznaczają &quot;większe od <code class="plain">n</code>&quot;</li>
+				<li>liczby zaczynające się od <code class="plain">-</code> oznaczają &quot;mniejsze od <code class="plain">n</code>&quot;</li>
+				<li>pozostałe liczby oznaczają &quot;dokładnie <code class="plain">n</code>&quot;</li>
+			</ul>
+			<p><code class="plain">-maxdepth</code> wyszukuje maksymalnie do podanej głębokości. Głębokość 0 oznacza, żeby nie wyszukiwać w podkatalogach.</p>
+			<p><code class="plain">-ctime</code> wyszukuje pliki utworzone <code class="plain">n</code> dni temu.</p>
+			<p><code class="plain">-size</code> wyszukuje pliki o podanym rozmiarze, można używać przyrostków:</p>
+			<ul>
+				<li><code class="plain">c</code> - bajty</li>
+				<li><code class="plain">k</code> - kilobajty</li>
+				<li><code class="plain">M</code> - megabajty</li>
+				<li><code class="plain">G</code> - gigabajty</li>
+			</ul>
+			<p><code class="plain">-type</code> wyszukuje tylko pliki danego typu w systemie plików:</p>
+			<ul>
+				<li><code class="plain">b</code>, <code class="plain">c</code> - urządzenie blokowe/znakowe</li>
+				<li><code class="plain">d</code> - katalog</li>
+				<li><code class="plain">f</code> - zwykły plik (brak typu)</li>
+				<li><code class="plain">l</code> - link (dowiązanie symboliczne)</li>
+			</ul>
+			<p><code class="plain">-perm</code> dopasowuje prawa dostępu (w układzie ósemkowym)</p>
+			<ul>
+				<li>prawa zaczynające się od <code class="plain">+</code> oznaczają &quot;co najwyżej takie prawa&quot;</li>
+				<li>prawa zaczynające się od <code class="plain">-</code> oznaczają &quot;co najmniej takie prawa&quot;</li>
+				<li>pozostałe prawa oznaczają &quot;dokładnie takie prawa&quot;</li>
+			</ul>
+			<p>-exec wykonuje na każdym znalezionym pliku podane polecenie; <code class="plain">{}</code> jest zastępowane nazwą pliku, średnik jest wymagany i należy zabezpieczyć go backslashem przed interpretacją przez basha.</p>
+			<p>Przykłady:</p>
+			<pre>find /tmp -name core -type f # plik 'core' w /tmp</pre>
+			<pre>find . -type f -exec cat '{}' \; # wypisuje pliki z bież. kat.</pre>
+			<pre>find . -ctime -3 # pliki nie starsze niż 3 dni</pre>
+		</command>
+	</section>
+
+	<section title="Archiwa">
+		<paragraph>
+			<p>UNIX tradycyjnie używa systemu naśladującego archiwizację taśmową, stąd występuje wyraźny podział na archiwizację ciągłą i kompresję.</p>
+			<p>Archiwizacja ciągła łączy wiele plików w jeden, ale nie zmniejsza ich objętości (nie kompresuje).</p>
+			<p>Kompresja zmniejsza objętość plików, ale nie można kompresować kilku plików w jeden plik wynikowy (ile plików na wejściu, tyle na wyjściu).</p>
+			<p>Do archiwizacji ciągłej używa się programu tar, a do kompresji gzip/gzip.</p>
+		</paragraph>
+
+		<command>
+			<h>
+				<pre>tar [-c/-x/-t] [-v] -f archiwum [pliki]</pre>
+				<p>Wykonuje archiwizację ciągłą podanych plików.</p>
+			</h>
+			<p><code class="plain">-c</code> tworzy archiwum</p>
+			<p><code class="plain">-x</code> wypakowuje archiwum</p>
+			<p><code class="plain">-t</code> wypisuje zawartość archiwum</p>
+			<p><code class="plain">-v</code> wypisuje wszystkie przetwarzane pliki (przy archiwach z wieloma plikami powolne!)</p>
+			<p><code class="plain">-f</code> ustawia plik archiwum do użycia (właściwie opcjonalne, ale bez sensu)</p>
+			<p>Przykłady:</p>
+			<pre>tar -cvf arch.tar plik1 plik2 plik3 # łączy 3 pliki do arch.tar</pre>
+			<pre>tar -xvf arch.tar # wypakowuje do bież. kat.</pre>
+		</command>
+
+		<command>
+			<h>
+				<pre>gzip [-d] plik</pre>
+				<pre>bzip2 [-d] plik</pre>
+				<p>Kompresuje plik i dopisuje na końcu nazwy nowe rozszerzenie.</p>
+			</h>
+			<p>-d przełącza na dekompresję zamiast kompresji.</p>
+		</command>
+
+		<command>
+			<h>
+				<pre>gunzip plik</pre>
+				<pre>bunzip2 plik</pre>
+				<p>Dekompresuje, tak samo jak gzip -d/bzip2 -d.</p>
+			</h>
+		</command>
+
+		<paragraph>
+			<p>Niektóre wersje tar-a mają wbudowany gzip/bzip2. Taki tar może od razu kompresować lub dekompresować archiwa. Wtedy można używać dodatkowych przełączników:</p>
+			<ul>
+				<li><code class="plain">-z</code> oznacza, że archiwum ma być (jest) skompresowane gzipem.</li>
+				<li><code class="plain">-j</code> oznacza, że archiwum ma być (jest) skompresowane bzipem2.</li>
+			</ul>
+		</paragraph>
+	</section>
+
+	<section title="Prawa dostępu">
+<paragraph>
+	<p>Prawa dostępu są przedstawiane w postaci 4 cyfr ósemkowych lub 10 liter.</p>
+	<p>Zapis cyfrowy - kolejne cyfry są sumami uprawnień:</p>
+	<ul>
+		<li>
+			<p>Pierwsza cyfra oznacza prawa specjalne:</p>
+			<ul>
+				<li>
+					<p><b>4</b> - SUID</p>
+					<p>Na plikach powoduje wykonanie zawsze z uprawnieniami właściciela.</p>
+					<p>Na katalogach powoduje dziedziczenie właściciela w nowych plikach.</p>
+				</li>
+				<li>
+					<p><b>2</b> - SGID</p>
+					<p>Na plikach powoduje wykonanie zawsze z uprawnieniami ich grupy.</p>
+					<p>Na katalogach powoduje dziedziczenie grupy w nowych plikach.</p>
+				</li>
+				<li>
+					<p><b>1</b> - sticky bit</p>
+					<p>Na plikach wykonywalnych powoduje zachowanie w pamięci dla szybszego dostępu w przyszłości (ignorowane przez Linuxa).</p>
+					<p>Na katalogach umożliwia usuwanie i zmianę nazwy zawartości tylko właścicielowi.</p>
+				</li>
+			</ul>
+		</li>
+		<li>
+			<p>Kolejne cyfry oznaczają prawa dla: właściciela, grupy, pozostałych:</p>
+			<ul>
+				<li><b>4</b> - odczyt pliku / odczyt nazw plików w katalogu</li>
+				<li><b>2</b> - zapis pliku / zmiana zawartości katalogu</li>
+				<li><b>1</b> - wykonanie pliku / odczyt szczegółów zawartości katalogu (prawa, daty itp.)</li>
+			</ul>
+		</li>
+	</ul>
+	<p>Zapis literowy:</p>
+	<ul>
+		<li>
+			<p>Pierwsza litera - typ pliku:</p>
+			<ul>
+				<li><code class="plain">b</code>, <code class="plain">c</code> - urządzenie blokowe/znakowe</li>
+				<li><code class="plain">d</code> - katalog</li>
+				<li><code class="plain">f</code> - zwykły plik (brak typu)</li>
+				<li><code class="plain">l</code> - link (dowiązanie symboliczne)</li>
+			</ul>
+		</li>
+		<li>
+			<p>Kolejne trójki oznaczają prawa: właściciela, grupy, pozostałych:</p>
+			<ul>
+				<li><code class="plain">r</code> - odczyt</li>
+				<li><code class="plain">w</code> - zapis</li>
+				<li><code class="plain">x</code> - wykonanie</li>
+			</ul>
+		</li>
+		<li>
+			<p>Występujące zamiast x prawa specjalne:</p>
+			<ul>
+				<li><code class="plain">s</code> - w 1. trójce SUID z wykonaniem, w 2. trójce SGID z wykonaniem</li>
+				<li><code class="plain">S</code> - w 1. trójce SUID bez wykonania, w 2. trójce SGID bez wykonania</li>
+				<li><code class="plain">t</code> - sticky bit z wykonaniem (występuje tylko w 3. trójce)</li>
+				<li><code class="plain">T</code> - sticky bit bez wykonania (występuje tylko w 3. trójce)</li>
+			</ul>
+		</li>
+	</ul>
+</paragraph>
+
+<command name="chmod">
+	<h>
+		<pre>chmod prawa plik</pre>
+		<p>Modyfikuje prawa dostępu do pliku.</p>
+	</h>
+	<p>Prawa mogą być przekazane w postaci ósemkowej lub literowej.</p>
+	<p>Przykłady:</p>
+	<pre>chmod 0777 plik.txt # pełne prawa dla wszystkich</pre>
+	<pre>chmod u=rx plik.txt # ustawia prawa właściciela na odczyt + wyk.</pre>
+	<pre>chmod go+r plik.txt # dodaje grupie i pozostałym prawo odczytu</pre>
+	<pre>chmod a-w plik.txt # usuwa wszystkim prawo zapisu</pre>
+</command>
+	</section>
+
+	<section title="Różności">
+		<command name="bc">
+			<h>
+				<pre>bc [-l]</pre>
+				<p>Kalkulator.</p>
+			</h>
+			<p>-l włącza dodatkowe funkcje matematyczne oraz obsługę liczb zmiennoprzecinkowych.</p>
+		</command>
+
+		<command name="cal">
+			<h>
+				<pre>cal [-3my] [[miesiąc] rok]</pre>
+				<p>Kalendarz.</p>
+			</h>
+			<p>Domyślnie wyświetla bieżący miesiąc.</p>
+			<p><code class="plain">-3</code> wyświetla też poprzedni i następny miesiąc</p>
+			<p><code class="plain">-m</code> uznaje poniedziałek za pierwszy dzień tygodnia</p>
+			<p><code class="plain">-y</code> wyświetla kalendarz na cały rok</p>
+			<p>Uwaga: rok 12 to nie to samo, co 2012.</p>
+		</command>
+
+		<command name="clear">
+			<h>
+				<pre>clear</pre>
+				<p>Czyści ekran konsoli (wow!)</p>
+			</h>
+		</command>
+
+		<command name="wget">
+			<h>
+				<pre>wget adres</pre>
+				<p>Ściąga plik z Internetu.</p>
+			</h>
+		</command>
+
+		<command name="history">
+			<h>
+				<pre>history</pre>
+				<p>Wypisuje historię wywoływanych poleceń.</p>
+			</h>
+		</command>
+
+		<command name="!!">
+			<h>
+				<pre>!!</pre>
+				<p>Zwraca ostatnie polecenie.</p>
+			</h>
+			<p>Czasem jest lepsze niż strzałka w górę i <kbd>Enter</kbd>, np. jeśli chcemy je wypisać: <code>echo !!</code></p>
+		</command>
+
+		<command name="!n">
+			<h>
+				<pre>!liczba</pre>
+				<p>Zwraca polecenie o danym numerze w historii (history).</p>
+			</h>
+		</command>
+
+		<command name="!-n">
+			<h>
+				<pre>!-liczba</pre>
+				<p>Zwraca polecenie wywołane daną ilość poleceń temu.</p>
+			</h>
+			<p>Przykłady:</p>
+			<pre>!-3 # polecenie wywołane 3 polecenia temu</pre>
+			<pre>!-1 # to samo co !!</pre>
+		</command>
+
+		<command name="!&lt;str&gt;">
+			<h>
+				<pre>!tekst</pre>
+				<p>Zwraca ostatnie wykonane polecenie zaczynające się od tekst.</p>
+			</h>
+		</command>
+	</section>
+
+</manual>
