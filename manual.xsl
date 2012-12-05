@@ -23,7 +23,7 @@
 				background-color: #f0f0f0;
 			}
 
-			a {
+			a, a:visited {
 				color: #d04000;
 				text-decoration: none;
 				border-bottom: 1px solid #d06000;
@@ -42,31 +42,128 @@
 				font-family: Merienda, 'Open Sans', Arial, Helvetica, sans-serif;
 			}
 
-			#anchor_top {
+			#anchor {
 				display: block;
 				position: fixed;
 				top: 0;
 				left: 50%;
-				width: 120px;
-				margin-left: 395px;
-				padding: 1px 0 4px;
+				margin-left: 410px;
 				text-align: center;
 				background-color: white;
+				background-image: -webkit-linear-gradient(top, white, #f0f0f0);
+				background-image: -moz-linear-gradient(top, white, #f0f0f0);
+				background-image: -ms-linear-gradient(top, white, #f0f0f0);
+				background-image: -o-linear-gradient(top, white, #f0f0f0);
+				background-image: linear-gradient(top, white, #f0f0f0);
 				color: #f06000;
 				border: 1px solid #f08000;
 				border-top: none;
-				border-right: none;
+				border-radius: 0 0 5px 5px;
+				box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+			}
+
+			#anchor > *, #anchor > *:visited {
+				display: inline-block;
+				width: 40px;
+				padding: 0 0 5px;
+				border: none;
+			}
+
+			#anchor > * + * {
+				border-left: 1px solid #f08000;
+				border-color: #f08000 !important;
+			}
+
+			#anchor > *:hover {
+				color: #f06000;
+				box-shadow: 0 0 5px #f08000;
+				cursor: pointer;
+				background-image: -webkit-linear-gradient(bottom, #f8f8f8, #f0f0f0);
+				background-image: -moz-linear-gradient(bottom, #f8f8f8, #f0f0f0);
+				background-image: -ms-linear-gradient(bottom, #f8f8f8, #f0f0f0);
+				background-image: -o-linear-gradient(bottom, #f8f8f8, #f0f0f0);
+				background-image: linear-gradient(bottom, #f8f8f8, #f0f0f0);
+			}
+
+			#anchor > *:first-of-type {
 				border-radius: 0 0 0 5px;
 			}
 
-			#anchor_top:hover {
-				color: #f06000;
-				border-color: #f08000;
-				box-shadow: 0 0 5px #f08000;
+			#anchor > *:last-of-type {
+				border-radius: 0 0 5px 0;
+			}
+
+			#gotob:hover {
+				border-radius: 0;
+			}
+
+			#gotob:hover + #goto, #goto:hover {
+				display: block;
+			}
+
+			#goto, .subgoto {
+				display: none;
+				float: right;
+				position: absolute;
+				right: 0;
+				width: 240px;
+				padding: 0;
+				background-color: #f8f8f8;
+				border: 1px solid #f08000;
+				border-radius: 5px 0 5px 5px !important;
+				box-shadow: -1px 1px 5px -1px #f08000;
+			}
+
+			.subgoto {
+				width: 120px;
+				right: 220px;
+				margin-top: -24px;
+			}
+
+			#goto ul {
+				list-style-type: none;
+			}
+
+			#goto li {
+				display: block;
+				font-size: 0.9em;
+				margin: 0;
+			}
+
+			#goto a {
+				display: block;
+				padding: 5px 8px;
+				border: none;
+				text-decoration: underline;
+				text-align: right;
+			}
+
+			#goto li + li a {
+				border-top: 1px solid #e4e4e4;
+			}
+
+			#goto a:hover {
+				background-color: white;
+			}
+
+			a:hover + .subgoto, .subgoto:hover {
+				display: block;
+			}
+
+			#goto li:first-of-type a {
+				border-radius: 5px 0 0 0;
+			}
+
+			#goto li:last-of-type a {
+				border-radius: 0 0 5px 5px;
+			}
+
+			#goto li:first-of-type:last-of-type a {
+				border-radius: 5px 0 5px 5px;
 			}
 
 			#container {
-				width: 960px;
+				width: 888px;
 				margin: 0 auto;
 				padding: 16px 36px 64px;
 				background-color: white;
@@ -256,7 +353,39 @@
 	</head>
 	<body>
 		<div id="container">
-			<a href="#" id="anchor_top">&#8593; do góry &#8593;</a>
+			<div id="anchor">
+				<a href="#">&#8593;</a>
+				<a href="#" id="gotob" onclick="return false;">&#8595;</a>
+				<ul id="goto">
+					<xsl:for-each select="manual/section">
+					<li>
+						<a>
+							<xsl:attribute name="href">#section<xsl:value-of select="position()" /></xsl:attribute>
+							<xsl:value-of select="@title" />
+						</a>
+						<xsl:if test="command">
+						<ul class="subgoto">
+							<xsl:for-each select="command">
+							<li>
+								<a>
+									<xsl:choose>
+										<xsl:when test="contains(@name,',')">
+											<xsl:attribute name="href">#cmd_<xsl:value-of select="substring-before(@name,',')" /></xsl:attribute>
+										</xsl:when>
+										<xsl:otherwise>
+											<xsl:attribute name="href">#cmd_<xsl:value-of select="@name" /></xsl:attribute>
+										</xsl:otherwise>
+									</xsl:choose>
+									<xsl:value-of select="@name" />
+								</a>
+							</li>
+							</xsl:for-each>
+						</ul>
+						</xsl:if>
+					</li>
+					</xsl:for-each>
+				</ul>
+			</div>
 			<header>
 				<table>
 					<xsl:apply-templates select="manual/meta/data" />
@@ -265,7 +394,23 @@
 				<div class="clear" />
 			</header>
 			<section>
-				<xsl:apply-templates select="manual/section" />
+				<xsl:for-each select="manual/section">
+				<a>
+					<xsl:attribute name="name">section<xsl:value-of select="position()" /></xsl:attribute>
+				</a>
+				<article>
+					<h2><xsl:value-of select="@title" /></h2>
+					<xsl:if test="@quote">
+					<figure>
+						<blockquote><xsl:value-of select="@quote" /></blockquote>
+						<xsl:if test="@author">
+						<figcaption>- <xsl:value-of select="@author" /></figcaption>
+						</xsl:if>
+					</figure>
+					</xsl:if>
+					<xsl:apply-templates select="list | paragraph | command" />
+				</article>
+				</xsl:for-each>
 			</section>
 		</div>
 	</body>
@@ -288,25 +433,10 @@
 	<xsl:template match="meta/data/a">
 					<a target="_blank">
 						<xsl:attribute name="href">
-							<xsl:value-of select="@href" />
+						<xsl:value-of select="@href" />
 						</xsl:attribute>
 						<xsl:value-of select="." />
 					</a>
-	</xsl:template>
-
-	<xsl:template match="section">
-				<article>
-					<h2><xsl:value-of select="@title" /></h2>
-					<xsl:if test="@quote">
-					<figure>
-						<blockquote><xsl:value-of select="@quote" /></blockquote>
-						<xsl:if test="@author">
-						<figcaption>- <xsl:value-of select="@author" /></figcaption>
-						</xsl:if>
-					</figure>
-					</xsl:if>
-					<xsl:apply-templates select="list | paragraph | command" />
-				</article>
 	</xsl:template>
 
 	<xsl:template match="section/list">
@@ -326,6 +456,16 @@
 	</xsl:template>
 
 	<xsl:template match="section/command">
+					<a>
+						<xsl:choose>
+							<xsl:when test="contains(@name,',')">
+								<xsl:attribute name="name">cmd_<xsl:value-of select="substring-before(@name,',')" /></xsl:attribute>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:attribute name="name">cmd_<xsl:value-of select="@name" /></xsl:attribute>
+							</xsl:otherwise>
+						</xsl:choose>
+					</a>
 					<div class="command">
 						<xsl:if test="@name">
 							<h3><xsl:value-of select="@name" /></h3>
