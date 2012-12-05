@@ -408,82 +408,154 @@
 	</section>
 
 	<section title="Prawa dostępu">
-<paragraph>
-	<p>Prawa dostępu są przedstawiane w postaci 4 cyfr ósemkowych lub 10 liter.</p>
-	<p>Zapis cyfrowy - kolejne cyfry są sumami uprawnień:</p>
-	<ul>
-		<li>
-			<p>Pierwsza cyfra oznacza prawa specjalne:</p>
+		<paragraph>
+			<p>Prawa dostępu są przedstawiane w postaci 4 cyfr ósemkowych lub 10 liter.</p>
+			<p>Zapis cyfrowy - kolejne cyfry są sumami uprawnień:</p>
 			<ul>
 				<li>
-					<p><b>4</b> - SUID</p>
-					<p>Na plikach powoduje wykonanie zawsze z uprawnieniami właściciela.</p>
-					<p>Na katalogach powoduje dziedziczenie właściciela w nowych plikach.</p>
+					<p>Pierwsza cyfra oznacza prawa specjalne:</p>
+					<ul>
+						<li>
+							<p><b>4</b> - SUID</p>
+							<p>Na plikach powoduje wykonanie zawsze z uprawnieniami właściciela.</p>
+							<p>Na katalogach powoduje dziedziczenie właściciela w nowych plikach.</p>
+						</li>
+						<li>
+							<p><b>2</b> - SGID</p>
+							<p>Na plikach powoduje wykonanie zawsze z uprawnieniami ich grupy.</p>
+							<p>Na katalogach powoduje dziedziczenie grupy w nowych plikach.</p>
+						</li>
+						<li>
+							<p><b>1</b> - sticky bit</p>
+							<p>Na plikach wykonywalnych powoduje zachowanie w pamięci dla szybszego dostępu w przyszłości (ignorowane przez Linuxa).</p>
+							<p>Na katalogach umożliwia usuwanie i zmianę nazwy zawartości tylko właścicielowi.</p>
+						</li>
+					</ul>
 				</li>
 				<li>
-					<p><b>2</b> - SGID</p>
-					<p>Na plikach powoduje wykonanie zawsze z uprawnieniami ich grupy.</p>
-					<p>Na katalogach powoduje dziedziczenie grupy w nowych plikach.</p>
+					<p>Kolejne cyfry oznaczają prawa dla: właściciela, grupy, pozostałych:</p>
+					<ul>
+						<li><b>4</b> - odczyt pliku / odczyt nazw plików w katalogu</li>
+						<li><b>2</b> - zapis pliku / zmiana zawartości katalogu</li>
+						<li><b>1</b> - wykonanie pliku / odczyt szczegółów zawartości katalogu (prawa, daty itp.)</li>
+					</ul>
+				</li>
+			</ul>
+			<p>Zapis literowy:</p>
+			<ul>
+				<li>
+					<p>Pierwsza litera - typ pliku:</p>
+					<ul>
+						<li><code class="plain">b</code>, <code class="plain">c</code> - urządzenie blokowe/znakowe</li>
+						<li><code class="plain">d</code> - katalog</li>
+						<li><code class="plain">f</code> - zwykły plik (brak typu)</li>
+						<li><code class="plain">l</code> - link (dowiązanie symboliczne)</li>
+					</ul>
 				</li>
 				<li>
-					<p><b>1</b> - sticky bit</p>
-					<p>Na plikach wykonywalnych powoduje zachowanie w pamięci dla szybszego dostępu w przyszłości (ignorowane przez Linuxa).</p>
-					<p>Na katalogach umożliwia usuwanie i zmianę nazwy zawartości tylko właścicielowi.</p>
+					<p>Kolejne trójki oznaczają prawa: właściciela, grupy, pozostałych:</p>
+					<ul>
+						<li><code class="plain">r</code> - odczyt</li>
+						<li><code class="plain">w</code> - zapis</li>
+						<li><code class="plain">x</code> - wykonanie</li>
+					</ul>
+				</li>
+				<li>
+					<p>Występujące zamiast x prawa specjalne:</p>
+					<ul>
+						<li><code class="plain">s</code> - w 1. trójce SUID z wykonaniem, w 2. trójce SGID z wykonaniem</li>
+						<li><code class="plain">S</code> - w 1. trójce SUID bez wykonania, w 2. trójce SGID bez wykonania</li>
+						<li><code class="plain">t</code> - sticky bit z wykonaniem (występuje tylko w 3. trójce)</li>
+						<li><code class="plain">T</code> - sticky bit bez wykonania (występuje tylko w 3. trójce)</li>
+					</ul>
 				</li>
 			</ul>
-		</li>
-		<li>
-			<p>Kolejne cyfry oznaczają prawa dla: właściciela, grupy, pozostałych:</p>
-			<ul>
-				<li><b>4</b> - odczyt pliku / odczyt nazw plików w katalogu</li>
-				<li><b>2</b> - zapis pliku / zmiana zawartości katalogu</li>
-				<li><b>1</b> - wykonanie pliku / odczyt szczegółów zawartości katalogu (prawa, daty itp.)</li>
-			</ul>
-		</li>
-	</ul>
-	<p>Zapis literowy:</p>
-	<ul>
-		<li>
-			<p>Pierwsza litera - typ pliku:</p>
-			<ul>
-				<li><code class="plain">b</code>, <code class="plain">c</code> - urządzenie blokowe/znakowe</li>
-				<li><code class="plain">d</code> - katalog</li>
-				<li><code class="plain">f</code> - zwykły plik (brak typu)</li>
-				<li><code class="plain">l</code> - link (dowiązanie symboliczne)</li>
-			</ul>
-		</li>
-		<li>
-			<p>Kolejne trójki oznaczają prawa: właściciela, grupy, pozostałych:</p>
-			<ul>
-				<li><code class="plain">r</code> - odczyt</li>
-				<li><code class="plain">w</code> - zapis</li>
-				<li><code class="plain">x</code> - wykonanie</li>
-			</ul>
-		</li>
-		<li>
-			<p>Występujące zamiast x prawa specjalne:</p>
-			<ul>
-				<li><code class="plain">s</code> - w 1. trójce SUID z wykonaniem, w 2. trójce SGID z wykonaniem</li>
-				<li><code class="plain">S</code> - w 1. trójce SUID bez wykonania, w 2. trójce SGID bez wykonania</li>
-				<li><code class="plain">t</code> - sticky bit z wykonaniem (występuje tylko w 3. trójce)</li>
-				<li><code class="plain">T</code> - sticky bit bez wykonania (występuje tylko w 3. trójce)</li>
-			</ul>
-		</li>
-	</ul>
-</paragraph>
+		</paragraph>
 
-<command name="chmod">
-	<h>
-		<pre>chmod prawa plik</pre>
-		<p>Modyfikuje prawa dostępu do pliku.</p>
-	</h>
-	<p>Prawa mogą być przekazane w postaci ósemkowej lub literowej.</p>
-	<p>Przykłady:</p>
-	<pre>chmod 0777 plik.txt # pełne prawa dla wszystkich</pre>
-	<pre>chmod u=rx plik.txt # ustawia prawa właściciela na odczyt + wyk.</pre>
-	<pre>chmod go+r plik.txt # dodaje grupie i pozostałym prawo odczytu</pre>
-	<pre>chmod a-w plik.txt # usuwa wszystkim prawo zapisu</pre>
-</command>
+		<command name="chmod">
+			<h>
+				<pre>chmod prawa plik</pre>
+				<p>Modyfikuje prawa dostępu do pliku.</p>
+			</h>
+			<p>Prawa mogą być przekazane w postaci ósemkowej lub literowej.</p>
+			<p>Przykłady:</p>
+			<pre>chmod 0777 plik.txt # pełne prawa dla wszystkich</pre>
+			<pre>chmod u=rx plik.txt # ustawia prawa właściciela na odczyt + wyk.</pre>
+			<pre>chmod go+r plik.txt # dodaje grupie i pozostałym prawo odczytu</pre>
+			<pre>chmod a-w plik.txt # usuwa wszystkim prawo zapisu</pre>
+		</command>
+	</section>
+
+	<section title="Użytkownicy">
+		<paragraph>
+			<p>Dane o użytkownikach są standardowo przechowywane w następujących plikach:</p>
+			<ul>
+				<li>Użytkownicy: <code class="plain">/etc/passwd</code></li>
+				<li>Grupy użytkowników: <code class="plain">/etc/group</code></li>
+			</ul>
+			<p>Każda linijka jest jednym wpisem składających się z danych oddzielonych dwukropkami, tworząc w ten sposób swego rodzaju kolumny. Kolejne kolumny oznaczają:</p>
+			<ul>
+				<li>
+					W pliku <code class="plain">/etc/passwd</code>:
+					<ol>
+						<li>Nazwa użytkownika</li>
+						<li>Informacje o haśle (dawniej zakodowane hasło)</li>
+						<li>Identyfikator liczbowy użytkownika <i>(niekoniecznie unikatowy)</i></li>
+						<li>Identyfikator liczbowy grupy podstawowej użytkownika</li>
+						<li>Opcjonalne informacje o użytkowniku: imię i nazwisko, nr telefonu itp. <i>(tzw. Gecos field)</i></li>
+						<li>Ścieżka do katalogu domowego użytkownika</li>
+						<li>Ścieżka do programu uruchamianego po zalogowaniu (np. <code class="plain">/bin/bash</code>)</li>
+					</ol>
+				</li>
+				<li>
+					W pliku <code class="plain">/etc/group</code>:
+					<ol>
+						<li>Nazwa grupy</li>
+						<li>Hasło grupy (obecnie nieużywane)</li>
+						<li>Identyfikator liczbowy grupy</li>
+						<li>Nazwy członków grupy oddzielone przecinkami</li>
+					</ol>
+				</li>
+			</ul>
+			<p>Grupą efektywną nazywa się grupę, z którą użytkownik w danym wypadku pracuje.</p>
+			<p>Użytkownikiem z najwyższymi uprawnieniami obecnym w każdym UNIX-ie jest <i>root</i>. Nie podlega on ograniczenim praw dostępu lub komend.</p>
+			<p>Polecenia do zarządzania użytkownikami nie opisane w tym cheat sheecie: <code>useradd</code>, <code>userdel</code>, <code>usermod</code>, <code>chage</code>, <code>chfn</code>, <code>chsh</code>.</p>
+		</paragraph>
+
+		<command name="passwd">
+			<h>
+				<pre>passwd [nazwa]</pre>
+				<p>Zmienia hasło danego (lub bieżącego) użytkownika.</p>
+			</h>
+			<p>Program po uruchomieniu zapyta o stare, a następnie dwukrotnie nowe hasło</p>.
+			<p>Tylko <i>root</i> może użyć nazwy użytkownika w parametrze.</p>
+		</command>
+
+		<command name="id">
+			<h>
+				<pre>id [-ugG] [nazwa]</pre>
+				<p>Wyświetla informacje o podanym (lub bieżącym) użytkowniku.</p>
+			</h>
+			<p><code class="plain">-u</code> podaje tylko identyfikator użytkownika.</p>
+			<p><code class="plain">-g</code> podaje tylko grupę efektywną.</p>
+			<p><code class="plain">-G</code> podaje tylko wszystkie grupy użytkownika.</p>
+		</command>
+
+		<command name="who, w">
+			<h>
+				<pre>who</pre>
+				<pre>w</pre>
+				<p>Wyświetla informacje o zalogowanych użytkownikach.</p>
+			</h>
+		</command>
+
+		<command name="last">
+			<h>
+				<pre>last [nazwa]</pre>
+				<p>Wyświetla informacje o logowaniach użytkowniów do systemu.</p>
+			</h>
+			<p>Jeśli przekazany zostanie argument, wyświetla tylko logowania tego użytkownika.</p>
+		</command>
 	</section>
 
 	<section title="Różności">
