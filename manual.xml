@@ -366,7 +366,7 @@
 			<p>Do archiwizacji ciągłej używa się programu tar, a do kompresji gzip/gzip.</p>
 		</paragraph>
 
-		<command>
+		<command name="tar">
 			<h>
 				<pre>tar [-c/-x/-t] [-v] -f archiwum [pliki]</pre>
 				<p>Wykonuje archiwizację ciągłą podanych plików.</p>
@@ -381,7 +381,7 @@
 			<pre>tar -xvf arch.tar # wypakowuje do bież. kat.</pre>
 		</command>
 
-		<command>
+		<command name="gzip, bzip2">
 			<h>
 				<pre>gzip [-d] plik</pre>
 				<pre>bzip2 [-d] plik</pre>
@@ -390,7 +390,7 @@
 			<p>-d przełącza na dekompresję zamiast kompresji.</p>
 		</command>
 
-		<command>
+		<command name="gunzip, bunzip2">
 			<h>
 				<pre>gunzip plik</pre>
 				<pre>bunzip2 plik</pre>
