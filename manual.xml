@@ -291,9 +291,10 @@
 
 		<command name="awk">
 			<h>
-				<pre>awk [trololo]</pre>
+				<pre>awk -F[separator] [trololo]</pre>
 				<p>Taki cut, tylko lepszy. Programowalny, co wyrażono symbolicznie poprzez "trololo".</p>
 			</h>
+			<p><code class="plain">-F</code> ustala nowy separator kolumn.</p>
 			<p>Przykłady:</p>
 			<pre>cat /etc/passwd | awk -F: '{print $3" "$5}'</pre>
 			<pre>cat /etc/passwd | awk -F: '{if ($3==69) print $5}'</pre>
