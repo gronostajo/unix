@@ -280,7 +280,7 @@
 		<command name="cut">
 			<h>
 				<pre>cut [-c które]/[-f które] [-dCośtam]</pre>
-				<p>Prymitywny program do wycinania kawałków plików. Wycina to, co sięmu poda.</p>
+				<p>Prymitywny program do wycinania kawałków plików. Wycina to, co się mu poda.</p>
 			</h>
 			<p><code class="plain">-c</code> wycina wybrane litery, np. <code class="plain">-c 3-9</code> wytnie z każdej linii znaki od trzeciego do dziewiątego.</p>
 			<p><code class="plain">-f</code> wycina kolumny oddzielone tabulatorem.</p>
@@ -321,6 +321,16 @@
 			<p><code class="plain">-f</code> ignoruje wielkość liter.</p>
 			<p><code class="plain">-n</code> sortuje po liczbach rozpoczynających wiersz, implikuje -b (dzięki temu otrzymamy 1, 2, 3, 11, a nie 1, 11, 2, 3).</p>
 			<p><code class="plain">-r</code> odwraca kolejność wyników.</p>
+		</command>
+
+		<command name="uniq">
+			<h>
+				<pre>uniq [-cdu]</pre>
+				<p>Usuwa powtarzające się po sobie takie same linie.</p>
+			</h>
+			<p><code class="plain">-c</code> dodatkowo wypisuje przed liniami ilość wystąpień.</p>
+			<p><code class="plain">-d</code> wypisuje tylko powtarzające się linie.</p>
+			<p><code class="plain">-u</code> wypisuje tylko niepowtarzające się linie.</p>
 		</command>
 
 		<command name="find">
