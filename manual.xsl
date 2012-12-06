@@ -109,6 +109,11 @@
 				width: 240px;
 				padding: 0;
 				background-color: #f8f8f8;
+				background-image: -webkit-linear-gradient(top, white, #f8f8f8 120px);
+				background-image: -moz-linear-gradient(top, white, #f8f8f8 120px);
+				background-image: -ms-linear-gradient(top, white, #f8f8f8 120px);
+				background-image: -o-linear-gradient(top, white, #f8f8f8 120px);
+				background-image: linear-gradient(top, white, #f8f8f8 120px);
 				border: 1px solid #f08000;
 				border-radius: 5px 0 5px 5px !important;
 				box-shadow: -1px 1px 5px -1px #f08000;
@@ -143,7 +148,8 @@
 			}
 
 			#goto a:hover {
-				background-color: white;
+				background-color: fed;
+				background-image: -webkit-linear-gradient(top, #fed 0, #ffe 30%, #ffe 70%, #fed 100%);
 			}
 
 			a:hover + .subgoto, .subgoto:hover {
@@ -355,7 +361,7 @@
 		<div id="container">
 			<div id="anchor">
 				<a href="#">&#8593;</a>
-				<a href="#" id="gotob" onclick="return false;">&#8595;</a>
+				<a href="#" id="gotob" onclick="return false;">...</a>
 				<ul id="goto">
 					<xsl:for-each select="manual/section">
 					<li>
