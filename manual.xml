@@ -576,7 +576,7 @@
 				<li>Terminal, w którym uruchomiony jest proces</li>
 			</ul>
 			<p><i>NICE</i> przyjmuje wartości z przedziału -20 &#8212; 19, gdzie -20 jest najwyższym priorytetem. Tylko <i>root</i> może nadawać ujemne priorytety procesom.</p>
-			<p>Naciśnięcie <kbd>^Z</kbd> zatrzymuje proces i wysyła go do tła.</p>
+			<p>Naciśnięcie <kbd>^Z</kbd> zatrzymuje proces i wysyła go do tła. Proces można wznowić poleceniem <code>fg</code>.</p>
 		</paragraph>
 
 		<command name="ps">
@@ -590,18 +590,18 @@
 			<p><code class="plain">-l</code> włącza format długi (więcej informacji naraz)</p>
 			<p><code class="plain">-o</code> wyświetla tylko wybrane kolumny spośród:</p>
 			<ul>
-				<li>%c - nazwa procesu</li>
-				<li>%C - użycie CPU w procentach</li>
-				<li>%t - czas CPU</li>
-				<li>%z - całkowita pamięć wykorzystywana przez proces</li>
-				<li>%a - parametry wywołania procesu</li>
-				<li>%n - wartość <i>NICE</i></li>
-				<li>%U - użytkownik-właściciel</li>
-				<li>%G - grupa-właściciel</li>
-				<li>%p - ID procesu (PID)</li>
-				<li>%P - ID procesu macierzystego (PPID)</li>
-				<li>%r - ID grupowania procesu (PGID)</li>
-				<li>%y - terminal, na którym działa proces</li>
+				<li><code class="plain">%c</code> - nazwa procesu</li>
+				<li><code class="plain">%C</code> - użycie CPU w procentach</li>
+				<li><code class="plain">%t</code> - czas CPU</li>
+				<li><code class="plain">%z</code> - całkowita pamięć wykorzystywana przez proces</li>
+				<li><code class="plain">%a</code> - parametry wywołania procesu</li>
+				<li><code class="plain">%n</code> - wartość <i>NICE</i></li>
+				<li><code class="plain">%U</code> - użytkownik-właściciel</li>
+				<li><code class="plain">%G</code> - grupa-właściciel</li>
+				<li><code class="plain">%p</code> - ID procesu (PID)</li>
+				<li><code class="plain">%P</code> - ID procesu macierzystego (PPID)</li>
+				<li><code class="plain">%r</code> - ID grupowania procesu (PGID)</li>
+				<li><code class="plain">%y</code> - terminal, na którym działa proces</li>
 			</ul>
 			<p>Na przykład nazwa procesu, użycie CPU i pamięci:</p>
 			<pre>ps -o %c%C%z</pre>
