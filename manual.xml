@@ -51,7 +51,7 @@
 				Ścieżki bez slasha (<code class="plain">/</code>) na początku są interpretowane względem aktualnej, ścieżki ze slashem są interpretowane względem korzenia, tzn. bezwzględnie.
 			</item>
 			<item>
-				Zmienne środowiskowe to zmienne tekstowe, których używa aktualnie bash (interpreter poleceń). Każda zmienna ma nazwę i wartość.
+				Zmienne środowiskowe to zmienne tekstowe, których używa aktualnie <i>bash</i> (interpreter poleceń). Każda zmienna ma nazwę i wartość.
 				Aby użyć zmiennej, należy wpisać symbol dolara i jej nazwę tam, gdzie ma zostać wstawiona (np. <code class="plain">$HOME</code>).
 			</item>
 			<item>
@@ -63,7 +63,7 @@
 				</ul>
 			</item>
 			<item>
-				<p>Interpretowanie poleceń: wszystko, co wpisujesz jest przed wykonaniem przetwarzane przez basha (interpreter poleceń). To znaczy jeśli wpiszesz <code>usun_pliki $PLIK</code> to <code class="plain">$PLIK</code> zostanie zastąpione zmienną <code class="plain">$PLIK</code>.</p>
+				<p>Interpretowanie poleceń: wszystko, co wpisujesz jest przed wykonaniem przetwarzane przez <i>basha</i> (interpreter poleceń). To znaczy jeśli wpiszesz <code>usun_pliki $PLIK</code> to <code class="plain">$PLIK</code> zostanie zastąpione zmienną <code class="plain">$PLIK</code>.</p>
 				<p>Należy szczególnie uważać na spacje w zmiennych. Powiedzmy, że <code class="plain">$PLIK</code> zawiera tekst: <code class="plain">plik1 plik2 plik3</code>. Wtedy zostanie wykonane polecenie:</p>
 				<pre>usun_pliki plik1 plik2 plik3</pre>
 				<p>Aby użyć znaku specjalnego jak zwykłego, należy poprzedzić go backslashem. Np. tu nie zostanie podstawiona zmienna:</p>
@@ -125,6 +125,12 @@
 			</item>
 			<item>
 				Strzałka w górę może oszczędzić sporo pisania.
+			</item>
+			<item>
+				Klawisz <kbd>Tab</kbd> służy do automatycznego uzupełniania. Na przykład po wpisaniu <code>rmd<kbd>Tab</kbd></code> <i>bash</i> automatycznie napisze <code>rmdir</code>. Ale znacznie bardziej użyteczne jest uzupełnianie nazw plików - wystarczy kilka początkowych liter i <i>bash</i> uzupełni resztę. Przykładowo, aby wypisać plik <code class="plain">~/jtp/programy/test.c</code> być może wystarczy wpisać:
+				<pre>cat j<kbd>Tab</kbd>/p<kbd>Tab</kbd>/t<kbd>Tab</kbd></pre>
+				Co da w efekcie:
+				<pre>cat jtp/programy/test.c</pre>
 			</item>
 		</list>
 	</section>
@@ -350,7 +356,7 @@
 				<li>prawa zaczynające się od <code class="plain">-</code> oznaczają &quot;co najmniej takie prawa&quot;</li>
 				<li>pozostałe prawa oznaczają &quot;dokładnie takie prawa&quot;</li>
 			</ul>
-			<p>-exec wykonuje na każdym znalezionym pliku podane polecenie; <code class="plain">{}</code> jest zastępowane nazwą pliku, średnik jest wymagany i należy zabezpieczyć go backslashem przed interpretacją przez basha.</p>
+			<p>-exec wykonuje na każdym znalezionym pliku podane polecenie; <code class="plain">{}</code> jest zastępowane nazwą pliku, średnik jest wymagany i należy zabezpieczyć go backslashem przed interpretacją przez <i>basha</i>.</p>
 			<p>Przykłady:</p>
 			<pre>find /tmp -name core -type f # plik 'core' w /tmp</pre>
 			<pre>find . -type f -exec cat '{}' \; # wypisuje pliki z bież. kat.</pre>
@@ -558,6 +564,102 @@
 		</command>
 	</section>
 
+	<section title="Zarządzanie procesami">
+		<paragraph>
+			<p>Każdy proces w systemie z rodziny UNIX ma:</p>
+			<ul>
+				<li>Unikatowy identyfikator procesu (PID)</li>
+				<li>Proces macierzysty, który go uruchomił (PPID) <i>(wyjątek: proces o PID 0)</i></li>
+				<li>Identyfikator grupowania procesów (PGID)</li>
+				<li>Parametr <i>NICE</i> używany do ustalania priorytetów</li>
+				<li>Właściciela, który go uruchomił (oraz grupę)</li>
+				<li>Terminal, w którym uruchomiony jest proces</li>
+			</ul>
+			<p><i>NICE</i> przyjmuje wartości z przedziału -20 &#8212; 19, gdzie -20 jest najwyższym priorytetem. Tylko <i>root</i> może nadawać ujemne priorytety procesom.</p>
+			<p>Naciśnięcie <kbd>^Z</kbd> zatrzymuje proces i wysyła go do tła.</p>
+		</paragraph>
+
+		<command name="ps">
+			<h>
+				<pre>ps [aux]/[-el] [-o format]</pre>
+				<p>Wypisuje procesy użytkownika działające w systemie.</p>
+			</h>
+			<p><code>ps</code> używa przełączników BSD oraz UNIX o różnym działaniu.</p>
+			<p><code class="plain">-e</code> i <code class="plain">ax</code> wyświetlają wszystkie procesy (nie tylko bieżącego użytkownika).</p>
+			<p><code class="plain">u</code> wypisuje w formacie przyjaznym człowiekowi.</p>
+			<p><code class="plain">-l</code> włącza format długi (więcej informacji naraz)</p>
+			<p><code class="plain">-o</code> wyświetla tylko wybrane kolumny spośród:</p>
+			<ul>
+				<li>%c - nazwa procesu</li>
+				<li>%C - użycie CPU w procentach</li>
+				<li>%t - czas CPU</li>
+				<li>%z - całkowita pamięć wykorzystywana przez proces</li>
+				<li>%a - parametry wywołania procesu</li>
+				<li>%n - wartość <i>NICE</i></li>
+				<li>%U - użytkownik-właściciel</li>
+				<li>%G - grupa-właściciel</li>
+				<li>%p - ID procesu (PID)</li>
+				<li>%P - ID procesu macierzystego (PPID)</li>
+				<li>%r - ID grupowania procesu (PGID)</li>
+				<li>%y - terminal, na którym działa proces</li>
+			</ul>
+			<p>Na przykład nazwa procesu, użycie CPU i pamięci:</p>
+			<pre>ps -o %c%C%z</pre>
+		</command>
+
+		<command name="nice">
+			<h>
+				<pre>nice [-n NICE] polecenie</pre>
+				<p>Wykonuje polecenie z podanym priorytetem.</p>
+			</h>
+			<p><code class="plain">NICE</code> przyjmuje wartości z przedziału -20 &#8212; 19, domyślnie 10.</p>
+			<p>Można podać dodatkowe argumenty dla polecenia.</p>
+		</command>
+
+		<command name="renice">
+			<h>
+				<pre>renice [+/-NICE] PID</pre>
+				<p>Zmienia o podaną wartość priorytet podanego procesu.</p>
+			</h>
+			<p><code class="plain">PID</code> można uzyskać na przykład poleceniem <code>ps</code>.</p>
+			<p>Użytkownicy inni niż <i>root</i> mogą tylko zwiększać <i>NICE</i> i tylko dla swoich procesów (więc <i>de facto</i> obniżać priorytet).</p>
+		</command>
+
+		<command name="kill">
+			<h>
+				<pre>kill [-sygnał] PID</pre>
+				<p>Wysyła sygnał do procesu.</p>
+			</h>
+			<p>Jeśli nie zostanie podany sygnał, wysłany zostanie <code class="plain">SIGTERM</code> (prośba o zakończenie).</p>
+			<p>Sygnały można podawać w postaci liczbowej lub opisowej.</p>
+			<p>Przykłady:</p>
+			<pre>kill -kill 123 # zabija proces 123</pre>
+		</command>
+
+		<command name="jobs">
+			<h>
+				<pre>jobs</pre>
+				<p>Wyświetla informacje o stanie procesów działających w tle.</p>
+			</h>
+		</command>
+
+		<command name="fg">
+			<h>
+				<pre>fg [PID]</pre>
+				<p>Przywraca najświeższy proces na pierwszy plan i wznawia go.</p>
+			</h>
+			<p>Podanie parametru powoduje wykonanie polecenia na danym, a nie najświeższym procesie.</p>
+		</command>
+
+		<command name="bg">
+			<h>
+				<pre>bg [PID]</pre>
+				<p>Wznawia w tle najświeższy proces.</p>
+			</h>
+			<p>Podanie parametru powoduje wykonanie polecenia na danym, a nie najświeższym procesie.</p>
+		</command>
+	</section>
+
 	<section title="Różności">
 		<command name="bc">
 			<h>
@@ -630,6 +732,14 @@
 				<pre>!tekst</pre>
 				<p>Zwraca ostatnie wykonane polecenie zaczynające się od tekst.</p>
 			</h>
+		</command>
+
+		<command name="$?">
+			<h>
+				<pre>$?</pre>
+				<p>Zwraca kod zakończenia ostatniego polecenia.</p>
+			</h>
+			<p>Poprawnie zakończone programy zwracają kod <code class="plain">0</code>.</p>
 		</command>
 	</section>
 
