@@ -9,7 +9,7 @@
 		<title><xsl:value-of select="manual/meta/title" /></title>
 		<style type="text/css">
 			@import url('normalize.css');
-			@import url('http://fonts.googleapis.com/css?family=Ubuntu+Mono|Open+Sans|Merienda&amp;subset=latin,latin-ext');
+			@import url('http://fonts.googleapis.com/css?family=Ubuntu+Mono|Open+Sans:400,400italic|Merienda&amp;subset=latin,latin-ext');
 
 			* {
 				margin: 0;
