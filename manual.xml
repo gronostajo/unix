@@ -107,7 +107,7 @@
 				<pre>polecenie 2&gt; bledy.txt</pre>
 			</item>
 			<item>
-				<p>Rurociąg: symbolem rury (<code class="plain">|</code>, ang. pipe) można od razu przekierować wyjście jednego polecenia na wejście drugiego, np.</p>
+				<p>Symbolem rury (<code class="plain">|</code>, ang. <i>pipe</i>) można od razu przekierować wyjście jednego polecenia na wejście drugiego, np.</p>
 				<pre>odczytaj_plik slodkiekotki.txt | wyslij_maila kotofil@gmail.com</pre>
 				<p>Można używać rury kilkakrotnie w jednym poleceniu i łączyć ją dowolnie z operatorami przekierowania, będą interpretowane od lewej do prawej.</p>
 				<pre>odczytaj_plik slodkiekotki.txt 2&gt; bledy.txt | wyslij_znajomym</pre>
@@ -169,7 +169,7 @@
 			</h>
 			<p><code class="plain">-p</code> włącza tworzenie drzewa katalogów, tzn. jeśli wyższe katalogi nie istnieją, zostaną utworzone.</p>
 			<p>Np. polecenie:</p>
-			<pre>mkdir ala/ma/kota</pre>
+			<pre>mkdir -p ala/ma/kota</pre>
 			<p>może w razie potrzeby zadziałać jak:</p>
 			<pre>mkdir ala ala/ma ala/ma/kota</pre>
 		</command>
@@ -177,7 +177,7 @@
 		<command name="rmdir">
 			<h>
 				<pre>rmdir plik [plik2] [plik3] [...]</pre>
-				<p>Usuwa katalogi o podanej nazwie o ile jest pusty.</p>
+				<p>Usuwa katalogi o podanej nazwie, o ile są puste.</p>
 			</h>
 		</command>
 
@@ -192,12 +192,13 @@
 
 		<command name="ls">
 			<h>
-				<pre>ls [-ali] [ścieżka]</pre>
+				<pre>ls [-adil] [ścieżka]</pre>
 				<p>Wypisuje zawartość aktualnego katalogu lub podanego w argumencie, pomija pliki zaczynające się od kropki.</p>
 			</h>
 			<p><code class="plain">-a</code> wypisuje również pliki zaczynające się od kropki.</p>
-			<p><code class="plain">-l</code> wypisuje długi listing, tzn. razem z prawami dostępu, ilością dowiązań twardych, właścielem zwykłym i grupowym, wielkością, datą.</p>
+			<p><code class="plain">-d</code> operuje na podanym katalogu, zamiast na jego zawartości.</p>
 			<p><code class="plain">-i</code> wypisuje i-węzły plików.</p>
+			<p><code class="plain">-l</code> wypisuje długi listing, tzn. razem z prawami dostępu, ilością dowiązań twardych, właścielem zwykłym i grupowym, wielkością, datą.</p>
 		</command>
 	</section>
 
@@ -222,7 +223,7 @@
 		<command name="wc">
 			<h>
 				<pre>wc [-clw] [plik]</pre>
-				<p>Wypisuje ilość wierszy, słów i bajtów w pliku tekstowym.</p>
+				<p>Wypisuje ilość wierszy, słów i znaków w pliku tekstowym.</p>
 			</h>
 			<p><code class="plain">-c</code> wypisuje tylko znaki.</p>
 			<p><code class="plain">-l</code> wypisuje tylko linie.</p>
@@ -249,9 +250,14 @@
 				<pre>tail [-liczba] [plik]</pre>
 				<p>Wypisuje tyle linii z początku/końca pliku. Jeśli nie zostanie podana liczba, przyjmuje domyślnie 10.</p>
 			</h>
+			<h>
+				<pre>tail -n+liczba [plik]</pre>
+				<p>Wypisuje plik począwszy od linii <code class="plain">liczba</code>.</p>
+			</h>
 			<p>Przykłady:</p>
 			<pre>head plik.txt # pierwsze 10 linii</pre>
 			<pre>tail -3 plik.txt # ostatnie 3 linie</pre>
+			<pre>tail -n+2 plik.txt # wszystko oprócz 1. linii</pre>
 		</command>
 
 		<command name="more">
@@ -320,7 +326,7 @@
 			</h>
 			<p><code class="plain">-b</code> ignoruje puste znaki na początku linii przy sortowaniu.</p>
 			<p><code class="plain">-f</code> ignoruje wielkość liter.</p>
-			<p><code class="plain">-n</code> sortuje po liczbach rozpoczynających wiersz, implikuje -b (dzięki temu otrzymamy 1, 2, 3, 11, a nie 1, 11, 2, 3).</p>
+			<p><code class="plain">-n</code> sortuje po liczbach rozpoczynających wiersz, implikuje <code class="plain">-b</code> (dzięki temu otrzymamy 1, 2, 3, 11, a nie 1, 11, 2, 3).</p>
 			<p><code class="plain">-r</code> odwraca kolejność wyników.</p>
 		</command>
 
@@ -336,7 +342,7 @@
 
 		<command name="find">
 			<h>
-				<pre>find [-maxdepth glebokosc] [-ctime n] [-size n[ckMG]] [-type typ] [-perm prawa]<br />[-exec polecenie {} \;] [ścieżka] [wyrażenie]</pre>
+				<pre>find [ścieżka] [-maxdepth glebokosc] [-ctime n] [-size n[ckMG]]<br />[-type typ] [-perm prawa] [-exec polecenie {} \;]</pre>
 				<p>Wyszukuje pliki w podanej ścieżce lub bieżącym katalogu i opcjonalnie wykonuje na nich podane operacje.</p>
 			</h>
 			<p>W przełącznikach zawierających argument <code class="plain">n</code> działają następujące reguły:</p>
@@ -544,7 +550,7 @@
 				<pre>passwd [nazwa]</pre>
 				<p>Zmienia hasło danego (lub bieżącego) użytkownika.</p>
 			</h>
-			<p>Program po uruchomieniu zapyta o stare, a następnie dwukrotnie nowe hasło</p>.
+			<p>Program po uruchomieniu zapyta o stare, a następnie dwukrotnie nowe hasło.</p>
 			<p>Tylko <i>root</i> może użyć nazwy użytkownika w parametrze.</p>
 		</command>
 
@@ -598,7 +604,7 @@
 			<p><code>ps</code> używa przełączników BSD oraz UNIX o różnym działaniu.</p>
 			<p><code class="plain">-e</code> i <code class="plain">ax</code> wyświetlają wszystkie procesy (nie tylko bieżącego użytkownika).</p>
 			<p><code class="plain">u</code> wypisuje w formacie przyjaznym człowiekowi.</p>
-			<p><code class="plain">-l</code> włącza format długi (więcej informacji naraz)</p>
+			<p><code class="plain">-l</code> włącza format długi (więcej informacji naraz).</p>
 			<p><code class="plain">-o</code> wyświetla tylko wybrane kolumny spośród:</p>
 			<ul>
 				<li><code class="plain">%c</code> - nazwa procesu</li>
