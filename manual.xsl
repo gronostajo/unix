@@ -478,7 +478,11 @@
 						</xsl:if>
 						<xsl:if test="h">
 						<div class="cmdhead">
-							<xsl:copy-of select="h" />
+							<xsl:for-each select="h">
+								<div>
+								<xsl:copy-of select="*" />
+								</div>
+							</xsl:for-each>
 						</div>
 						</xsl:if>
 						<xsl:copy-of select="p | pre | ul | ol" />
