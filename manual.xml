@@ -351,7 +351,7 @@
 				<li>liczby zaczynające się od <code class="plain">-</code> oznaczają &quot;mniejsze od <code class="plain">n</code>&quot;</li>
 				<li>pozostałe liczby oznaczają &quot;dokładnie <code class="plain">n</code>&quot;</li>
 			</ul>
-			<p><code class="plain">-maxdepth</code> wyszukuje maksymalnie do podanej głębokości. Głębokość 0 oznacza, żeby nie wyszukiwać w podkatalogach.</p>
+			<p><code class="plain">-maxdepth</code> wyszukuje maksymalnie do podanej głębokości. Głębokość 1 oznacza, żeby nie wyszukiwać w podkatalogach; 0 oznacza przejrzenie tylko podanych argumentów bez wchodzenia w nie.</p>
 			<p><code class="plain">-ctime</code> wyszukuje pliki utworzone <code class="plain">n</code> dni temu.</p>
 			<p><code class="plain">-size</code> wyszukuje pliki o podanym rozmiarze, można używać przyrostków:</p>
 			<ul>
