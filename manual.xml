@@ -274,7 +274,7 @@
 				<pre>less [plik]</pre>
 				<p>Rozbudowany more.</p>
 			</h>
-			<p>Można przewijać tekst strzałkami we wszystkich kierunkach, spacja przewija całą stronę. <kbd>q</kbd> wychodzi z programu.</p>
+			<p>Można przewijać tekst strzałkami we wszystkich kierunkach, spacja przewija całą stronę. <kbd>Page Up</kbd> i <kbd>Page Down</kbd> przewijają całymi stronami. <kbd>q</kbd> wychodzi z programu.</p>
 			<p>Wpisanie w programie <code class="plain">/costam</code> powoduje wyszukanie &quot;costam&quot; w pliku.</p>
 			<p><kbd>n</kbd> przeskakuje do następnego wyszukanego miejsca, <kbd>N</kbd> do poprzedniego.</p>
 			<p><kbd>&gt;</kbd> przeskakuje na koniec pliku, <kbd>&lt;</kbd> na początek.</p>
@@ -754,7 +754,7 @@
 		<command name="$?">
 			<h>
 				<pre>$?</pre>
-				<p>Zwraca kod zakończenia ostatniego polecenia.</p>
+				<p>Zmienna zawierająca kod zakończenia ostatniego polecenia.</p>
 			</h>
 			<p>Poprawnie zakończone programy zwracają kod <code class="plain">0</code>.</p>
 		</command>
